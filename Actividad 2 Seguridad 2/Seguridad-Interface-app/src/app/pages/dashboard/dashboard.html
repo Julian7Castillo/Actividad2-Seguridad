@@ -1,35 +1,71 @@
-<div class="dashboard" *ngIf="user as u">
+<div class="layout" *ngIf="user as u">
 
+  <!-- HEADER -->
   <header class="header">
-    <h2>Bienvenido, {{ u.name }}</h2>
-    <button (click)="logout()">Cerrar sesión</button>
+    <h1>Actividad 2</h1>
+
+    <div class="header-right">
+      <span>Hola, {{ u.name }}</span>
+
+      <!-- Botón solo ADMIN -->
+      <button *ngIf="u.role === 'admin'" (click)="goToCreateUser()">
+        + Crear Usuario
+      </button>
+
+      <button (click)="logout()">Cerrar sesión</button>
+    </div>
   </header>
 
-  <!-- Expected roles: 'admin', 'user'. Add more cases as needed for new roles. -->
-  @switch (u.role) {
-    @case ('admin') {
-      <section class="card">
-        <h3>Panel de administrador</h3>
-        <p>Tienes acceso completo al sistema.</p>
+  <!-- CONTENIDO -->
+  <div class="container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <ul>
+
+        <li (click)="view = 'home'">Inicio</li>
+
+        <!-- ADMIN -->
+        <li *ngIf="u.role === 'admin'" (click)="view = 'users'">
+          Gestión de usuarios
+        </li>
+
+        <!-- SELLER -->
+        <li *ngIf="u.role === 'seller'" (click)="view = 'users'">
+          Ver usuarios
+        </li>
+
+      </ul>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="content">
+
+      <!-- VISTA INICIO -->
+      <section *ngIf="view === 'home'" class="card">
+        <h2>Bienvenido, {{ u.name }}</h2>
+
+        <p *ngIf="u.role === 'admin'">
+          Tienes acceso completo al sistema.
+        </p>
+
+        <p *ngIf="u.role === 'seller'">
+          Puedes gestionar y visualizar usuarios.
+        </p>
+
+        <p *ngIf="u.role === 'user'">
+          Bienvenido a tu espacio personal.
+        </p>
       </section>
-    }
-    @case ('seller') {
-      <section class="card">
-        <h3>Panel de vendedor</h3>
-        <p>Tienes acceso a las funciones de vendedor.</p>
+
+      <!-- VISTA USUARIOS -->
+      <section *ngIf="view === 'users'" class="card">
+        <h3>Listado de usuarios</h3>
+
+        <!-- Aquí luego conectas con Laravel -->
+        <p>Aquí irá la tabla de usuarios...</p>
       </section>
-    }
-    @case ('user') {
-      <section class="card">
-        <h3>Panel de usuario</h3>
-        <p>Bienvenido a tu espacio personal.</p>
-      </section>
-    }
-    @default {
-      <section class="card">
-        <h3>Rol desconocido</h3>
-        <p>No tienes permisos asignados.</p>
-      </section>
-    }
-  }
+
+    </main>
+  </div>
 </div>

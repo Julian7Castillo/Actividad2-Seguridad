@@ -1,0 +1,17 @@
+<div class="card">
+  <h2>Crear Usuario</h2>
+
+  <form (submit)="createUser(createUserData)">
+    <input [(ngModel)]="createUserData.name" name="name" placeholder="Nombre" required>
+    <input [(ngModel)]="createUserData.email" name="email" placeholder="Email" required>
+    <input [(ngModel)]="createUserData.password" name="password" type="password" placeholder="Contraseña" required>
+
+    <select [(ngModel)]="createUserData.role" name="role">
+      <option value="user">Usuario</option>
+      <option value="seller">Seller</option>
+      <option value="admin">Admin</option>
+    </select>
+
+    <button type="submit">Crear</button>
+  </form>
+</div>
