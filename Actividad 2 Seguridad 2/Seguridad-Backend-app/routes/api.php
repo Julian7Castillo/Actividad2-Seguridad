@@ -2,34 +2,22 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-
-Route::get('/users', function () {
-    return User::all();
-});
-
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:api');
-
-
-
-Route::get('/test', function () {
-    return response()->json(['message' => 'API funcionando']);
-});
-
+use Laravel\Passport\Http\Middleware\CheckTokenForAnyScope;
 
 Route::post('/login', [AuthController::class, 'login']);
 
-
+//['auth:api',CheckTokenForAnyScope::using('user:read')]
 Route::middleware('auth:api')->group(function () {
 
     // obtener usuario autenticado (para dashboard)
-    Route::get('/user2', function () {
+    Route::get('/user', function () {
         return auth()->user();
     });
 
-    Route::get('/users2', function () {
+    Route::get('/users', function () {
         return User::all();
     });
 
@@ -44,7 +32,7 @@ Route::middleware('auth:api')->group(function () {
     });
 
 });
-
-//Route::middleware()->group(function () {
-    Route::post('/registro', [AuthController::class, 'registers']);
-//});
+//['auth:api', CheckTokenForAnyScope::using('admin:all')]
+Route::middleware('auth:api')->group(function () {
+    Route::post('/registro', [AuthController::class, 'register']);
+});
