@@ -21,6 +21,7 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
+            'role' => 'string|in:user,admin,seller'
         ]);
 
         if ($validator->fails()) {
@@ -30,10 +31,11 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'role' => $request->role,
             'password' => Hash::make($request->password)
         ]);
 
-        //$token = $user->createToken('BasketClub client')->accessToken;
+        //$token = $user->createToken('LoginUser client')->accessToken;
         $token = $user->createToken('LoginUser client', ['user:read'])->accessToken;
 
         return response()->json([
@@ -59,10 +61,11 @@ class AuthController extends Controller
         $user = Auth::user();
 
         if($user->role=='admin') {
-            $token = $user->createToken('LoginUser client',['user:all'])->accessToken;
+            $token = $user->createToken('LoginUser client',['admin:all'])->accessToken;
         } else {
             $token = $user->createToken('LoginUser client', ['user:read'])->accessToken;
         }
+        //$token = $user->createToken('LoginUser client')->accessToken;
 
         return response()->json([
             'user' => $user,

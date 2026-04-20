@@ -10,7 +10,7 @@ use Laravel\Passport\Http\Middleware\CheckTokenForAnyScope;
 Route::post('/login', [AuthController::class, 'login']);
 
 //['auth:api',CheckTokenForAnyScope::using('user:read')]
-Route::middleware('auth:api')->group(function () {
+Route::middleware(['auth:api',CheckTokenForAnyScope::using('user:read')])->group(function () {
 
     // obtener usuario autenticado (para dashboard)
     Route::get('/user', function () {
@@ -33,6 +33,6 @@ Route::middleware('auth:api')->group(function () {
 
 });
 //['auth:api', CheckTokenForAnyScope::using('admin:all')]
-Route::middleware('auth:api')->group(function () {
+Route::middleware(['auth:api', CheckTokenForAnyScope::using('admin:all')])->group(function () {
     Route::post('/registro', [AuthController::class, 'register']);
 });
