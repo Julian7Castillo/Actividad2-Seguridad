@@ -1,0 +1,35 @@
+<div class="dashboard" *ngIf="user as u">
+
+  <header class="header">
+    <h2>Bienvenido, {{ u.name }}</h2>
+    <button (click)="logout()">Cerrar sesión</button>
+  </header>
+
+  <!-- Expected roles: 'admin', 'user'. Add more cases as needed for new roles. -->
+  @switch (u.role) {
+    @case ('admin') {
+      <section class="card">
+        <h3>Panel de administrador</h3>
+        <p>Tienes acceso completo al sistema.</p>
+      </section>
+    }
+    @case ('seller') {
+      <section class="card">
+        <h3>Panel de vendedor</h3>
+        <p>Tienes acceso a las funciones de vendedor.</p>
+      </section>
+    }
+    @case ('user') {
+      <section class="card">
+        <h3>Panel de usuario</h3>
+        <p>Bienvenido a tu espacio personal.</p>
+      </section>
+    }
+    @default {
+      <section class="card">
+        <h3>Rol desconocido</h3>
+        <p>No tienes permisos asignados.</p>
+      </section>
+    }
+  }
+</div>
